@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>19 Días Pensando en Ti</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Cormorant+Garamond:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        @layer base {
+            body {
+                font-family: 'Cormorant Garamond', serif;
+            }
+            h1, h2, h3 {
+                font-family: 'Playfair Display', serif;
+            }
+        }
+
+        /* Gradiente de fondo elegante blanco */
+        .romantic-gradient {
+            background: linear-gradient(135deg, #FFFFFF 0%, #FFF5F7 50%, #FFFFFF 100%);
+        }
+
+        /* Animación de corazones flotantes */
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.3; }
+            50% { transform: translateY(-20px) rotate(5deg); opacity: 0.6; }
+        }
+
+        .floating-heart {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Animación de fade-in al scroll */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Animación de entrada inicial */
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .hero-animation {
+            animation: fadeInScale 1.2s ease-out;
+        }
+
+        /* Efecto de brillo en botón */
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .shimmer-button {
+            background: linear-gradient(90deg, #D4AF37 0%, #F8E8A6 50%, #D4AF37 100%);
+            background-size: 200% auto;
+            animation: shimmer 3s linear infinite;
+        }
+
+        /* Barra de progreso animada */
+        @keyframes progress {
+            from { width: 0%; }
+            to { width: 65%; }
+        }
+
+        .progress-bar {
+            animation: progress 2s ease-out forwards;
+        }
+
+        /* Scroll suave */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Contador animado */
+        .counter-animation {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Carrusel de notas con efecto de profundidad */
+        .carousel-container,
+        .carousel-container-songs {
+            position: relative;
+            overflow: hidden; /* 👈 antes estaba visible */
+            padding: 0;
+        }
+
+
+        .carousel-track,
+        .carousel-track-songs {
+            display: flex;
+            align-items: center;
+            transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+
+        .carousel-slide,
+        .carousel-slide-song {
+            flex: 0 0 100%;
+            display: flex;
+            justify-content: center;
+            transition: transform 0.45s ease, opacity 0.45s ease;
+            transform: scale(0.88);
+            opacity: 0.5;
+        }
+
+        .carousel-slide.active,
+        .carousel-slide-song.active {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+
+        .carousel-slide.prev,
+        .carousel-slide.next,
+        .carousel-slide-song.prev,
+        .carousel-slide-song.next {
+            transform: scale(0.93);
+            opacity: 0.7;
+        }
+
+        /* Indicadores elegantes */
+        .indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #D4D4D4;
+            transition: all 0.3s ease;
+        }
+
+        .indicator.active {
+            background: linear-gradient(135deg, #5B0E2D 0%, #8B1538 100%);
+            width: 24px;
+            border-radius: 4px;
+        }
+
+        .note-card,
+        .song-card {
+            box-shadow:
+                0 8px 20px rgba(0, 0, 0, 0.08),
+                0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .carousel-slide-song.active {
+            transform: scale(1);
+            opacity: 1;
+            filter: blur(0);
+            z-index: 10;
+        }
+
+        .carousel-slide-song.prev,
+        .carousel-slide-song.next {
+            transform: scale(0.9);
+            opacity: 0.6;
+            filter: blur(1px);
+        }
+
+        .play-btn {
+            outline: none !important;
+            box-shadow: none !important;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .play-btn:focus,
+        .play-btn:active {
+            outline: none !important;
+            box-shadow: none !important;
+        }
+
+        .play-btn {
+            width: 64px;
+            height: 64px;
+            border-radius: 9999px;
+            background: #f43f5e; /* rose-500 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            cursor: pointer;
+
+            outline: none;
+            box-shadow: none;
+            -webkit-tap-highlight-color: transparent;
+
+            transition: transform 0.25s ease, background 0.25s ease;
+        }
+
+        .play-btn:hover {
+            background: #e11d48; /* rose-600 */
+            transform: scale(1.05);
+        }
+
+        .play-btn:active {
+            transform: scale(0.95);
+        }
+
+        .play-btn svg {
+            width: 28px;
+            height: 28px;
+            fill: white;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+
+        @media (max-width: 640px) {
+            .carousel-slide,
+            .carousel-slide-song {
+                min-width: 100%;
+                transform: scale(0.95); /* menos reducción */
+            }
+        }
+    </style>
+</head>
+<body class="romantic-gradient min-h-screen text-gray-800 overflow-x-hidden">
+    
+    <!-- Corazones flotantes decorativos -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <div class="floating-heart absolute top-20 left-10 text-pink-400 opacity-20" style="animation-delay: 0s;">❤</div>
+        <div class="floating-heart absolute top-40 right-16 text-rose-400 opacity-20" style="animation-delay: 2s;">💕</div>
+        <div class="floating-heart absolute top-60 left-20 text-pink-400 opacity-20" style="animation-delay: 4s;">❤</div>
+        <div class="floating-heart absolute bottom-40 right-10 text-rose-400 opacity-20" style="animation-delay: 1s;">💕</div>
+        <div class="floating-heart absolute bottom-60 left-16 text-pink-400 opacity-20" style="animation-delay: 3s;">❤</div>
+    </div>
+
+    <!-- Contenedor principal centrado -->
+    <div class="relative z-10 max-w-lg mx-auto px-4 py-8">
+        
+        <!-- HERO SECTION -->
+        <section class="hero-animation text-center py-12 mb-8">
+            <h1 class="text-5xl md:text-6xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-rose-600 via-pink-600 to-rose-600">
+                19 Días Pensando en mi Corazoncito...
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-600 mb-8 font-light tracking-wide">
+                Cada día sin verte fue un recordatorio de cuánto te quiero
+            </p>
+            
+            <!-- Imagen especial (placeholder - reemplaza con tu foto) -->
+            <div class="mb-8 rounded-3xl overflow-hidden mx-auto max-w-sm border-4 border-rose-100 relative">
+                <img
+                    src="img/img-1.jpeg"
+                    alt="Nuestra foto especial"
+                    class="w-full h-full object-cover aspect-[3/4]"
+                >
+                <div class="absolute inset-0 bg-gradient-to-t from-rose-900/20 to-transparent"></div>
+            </div>
+
+
+            <!-- Botón con efecto shimmer -->
+            <button onclick="scrollToNotes()" class="bg-gradient-to-r from-rose-600 to-pink-600 text-white px-8 py-4 rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                Ver las 19 Notas ❤️
+            </button>
+        </section>
+
+        <!-- CONTADOR EMOCIONAL -->
+        <section class="fade-in bg-gradient-to-br from-rose-50 to-pink-50 rounded-3xl p-8 mb-12 text-center shadow-xl border-2 border-rose-100">
+            <div class="counter-animation">
+                <p class="text-3xl md:text-4xl font-semibold mb-2 text-gray-700">
+                    <span id="counter" class="text-5xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-rose-600 to-pink-600">19</span>
+                </p>
+                <p class="text-xl md:text-2xl text-gray-600 font-light">días sin verte...</p>
+                <p class="text-lg text-gray-500 mt-4 italic">pero pensando en ti cada segundo</p>
+            </div>
+        </section>
+
+        <!-- SECCIÓN DE LAS 20 NOTAS - CARRUSEL ELEGANTE -->
+        <section id="notes-section" class="mb-12 fade-in">
+            <h2 class="text-4xl font-bold text-center mb-10 text-transparent bg-clip-text bg-gradient-to-r from-rose-600 to-pink-600">Mis Pensamientos para Ti</h2>
+            
+            <!-- Carrusel Container -->
+            <div class="carousel-container relative">
+                <!-- Track del carrusel -->
+                <div class="carousel-track" id="carouselTrack">
+                    <!-- Las 20 notas se generarán dinámicamente con JavaScript -->
+                </div>
+            </div>
+
+            <!-- Indicadores de posición -->
+            <div class="flex justify-center items-center gap-2 mt-8">
+                <div id="indicators" class="flex gap-2"></div>
+            </div>
+
+            <!-- Contador de días -->
+            <div class="text-center mt-6">
+                <p class="text-gray-600 text-lg">
+                    <span id="currentDay" class="font-bold text-2xl text-rose-600">1</span> de 20
+                </p>
+            </div>
+        </section>
+
+        <!-- SECCIÓN TIPO SPOTIFY - CARRUSEL DE CANCIONES -->
+        <section class="fade-in mb-12">
+            <h3 class="text-3xl font-bold text-center mb-8 text-transparent bg-clip-text bg-gradient-to-r from-rose-600 to-pink-600">Nuestras Canciones</h3>
+            
+            <!-- Carrusel de canciones -->
+            <div class="carousel-container-songs relative">
+                <div class="carousel-track-songs" id="carouselTrackSongs">
+                    <!-- Las canciones se generarán dinámicamente -->
+                </div>
+            </div>
+
+            <!-- Indicadores de canciones -->
+            <div class="flex justify-center items-center gap-2 mt-6">
+                <div id="indicatorsSongs" class="flex gap-2"></div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN FINAL EMOTIVA -->
+        <section class="fade-in bg-gradient-to-br from-rose-50 to-pink-50 rounded-3xl p-8 mb-12 shadow-xl border-2 border-rose-100">
+            <h2 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-rose-600 to-pink-600 mb-6 text-center">Para mi Corazoncito Preciosa</h2>
+            
+            <div class="space-y-4 text-gray-700">
+                <p class="text-lg leading-relaxed">
+                    Bueno amor está idea surgio porque quería hacer algo especial para ti, algo que reflejara lo mucho que te amo y lo importante que eres para mí.
+                </p>
+
+                <p class="text-lg leading-relaxed">
+                    Quería que cada día sin verte se convirtiera en una oportunidad para recordarte lo mucho que te quiero, incluso en la distancia.
+                </p>
+
+                <p class="text-lg leading-relaxed">
+                    La idea de hacer esto en este formato fue porque quería que fuera algo visual, algo que pudieras ver y sentir en donde sea que estés y que te recordara que siempre estás en mi corazón, incluso cuando no podemos estar juntos físicamente.
+                </p>
+                
+                <div class="my-8 py-6 border-t-2 border-b-2 border-rose-200">
+                    <p class="text-2xl md:text-3xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-rose-600 to-pink-600 italic">
+                        "El amor no se mide en tiempo juntos, sino en cuánto extrañas a alguien cuando no está"
+                    </p>
+                </div>
+                
+                <p class="text-lg leading-relaxed">
+                    Quería que cada nota fuera un pequeño recordatorio de lo mucho que te amo, de lo importante que eres para mí y de lo feliz que me haces, incluso cuando no podemos estar juntos.
+                </p>
+                
+                <p class="text-lg leading-relaxed">
+                    Espero que cada nota te haga sonreír, que te recuerde lo mucho que te quiero y que te haga sentir un poquito más cerca de mí, incluso cuando estamos lejos.
+                </p>
+
+                <p class="text-lg leading-relaxed">
+                    Gracias por ser mi persona favorita, mi mejor amiga, mi compañera, mi todo. 
+                    Gracias por quererme incluso en la distancia.
+                </p>
+            </div>
+            
+            <div class="mt-8 text-center">
+                <p class="text-xl text-gray-600 mb-2 font-semibold">Con todo mi corazón,</p>
+                <p class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-rose-600 to-pink-600">Alexander Caviedes Romero</p>
+                <p class="text-lg text-gray-500 mt-4 italic">Vez que si fuiste mi 14 de febrero 💕</p>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="text-center py-8 text-gray-500">
+            <p class="text-sm italic">Creado con amor infinito para ti ❤️</p>
+            <p class="text-xs mt-2 opacity-75">14 de febrero, 2026</p>
+        </footer>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        // Datos de las 20 notas
+        const notes = [
+        {
+        day: 1,
+        date: "26 de enero, 2026",
+        text: "Hoy escuché una canción y sin darme cuenta ya estaba pensando en ti. Me di cuenta de algo simple: estés cerca o lejos, siempre estás conmigo.",
+        icon: "🎵"
+        },
+        {
+        day: 2,
+        date: "27 de enero, 2026",
+        text: "A veces la distancia pesa, no te voy a mentir. Pero nunca pesa más que las ganas que tengo de seguir contigo, de cuidarte y elegirte todos los días.",
+        icon: "🌙"
+        },
+        {
+        day: 3,
+        date: "28 de enero, 2026",
+        text: "Soñé contigo. Y aunque fue solo un sueño, desperté tranquilo porque sé que lo nuestro es real, incluso cuando no podemos abrazarnos.",
+        icon: "💭"
+        },
+        {
+        day: 4,
+        date: "29 de enero, 2026",
+        text: "Extraño tu risa. Esa risa que me calma, que me hace sentir en casa. No sabes cuánto la guardo en mi corazón cuando no estás.",
+        icon: "😊"
+        },
+        {
+        day: 5,
+        date: "30 de enero, 2026",
+        text: "Hay días grises, pero tú siempre eres mi parte bonita. Pensar en ti me da paz, me recuerda por qué vale la pena esperar.",
+        icon: "☀️"
+        },
+        {
+        day: 6,
+        date: "31 de enero, 2026",
+        text: "Una semana más lejos, pero un día menos para verte. No llevo la cuenta con tristeza, la llevo con ilusión.",
+        icon: "⏳"
+        },
+        {
+        day: 7,
+        date: "1 de febrero, 2026",
+        text: "Febrero llegó y pensé en ti. Pensé en que no necesito una fecha especial para amarte, porque contigo cualquier día lo es.",
+        icon: "💝"
+        },
+        {
+        day: 8,
+        date: "2 de febrero, 2026",
+        text: "Extraño cosas simples: caminar contigo, tomarte la mano, mirarte a los ojos. Y aun así, no me canso… me enamoro más.",
+        icon: "🤝"
+        },
+        {
+        day: 9,
+        date: "3 de febrero, 2026",
+        text: "Ya pasó la mitad del camino. Y si algo tengo claro, es que nunca dudé de seguir aquí, contigo, esperando sin rendirme.",
+        icon: "🎯"
+        },
+        {
+        day: 10,
+        date: "4 de febrero, 2026",
+        text: "No importa dónde esté, mi lugar siempre eres tú. Mi tranquilidad, mi refugio, mi persona favorita.",
+        icon: "🏡"
+        },
+        {
+        day: 11,
+        date: "5 de febrero, 2026",
+        text: "La distancia no me cansa, corazoncito. Me enseña a valorar más cada mensaje, cada palabra tuya.",
+        icon: "🌹"
+        },
+        {
+        day: 12,
+        date: "6 de febrero, 2026",
+        text: "Pienso mucho en el momento en que vuelva a abrazarte. No porque lo necesite para seguir, sino porque quiero compartirlo contigo.",
+        icon: "🤗"
+        },
+        {
+        day: 13,
+        date: "7 de febrero, 2026",
+        text: "Estamos más cerca de vernos, pero incluso si faltara más tiempo, yo seguiría aquí. Porque contigo no tengo prisa, tengo certeza.",
+        icon: "🎊"
+        },
+        {
+        day: 14,
+        date: "8 de febrero, 2026",
+        text: "Hay días difíciles, pero pensar en ti me recuerda que no estoy solo. Tu amor me acompaña más de lo que imaginas.",
+        icon: "✨"
+        },
+        {
+        day: 15,
+        date: "9 de febrero, 2026",
+        text: "Quedan pocos días y mi corazón late más fuerte. No por ansiedad, sino por felicidad. Elegirte siempre es fácil.",
+        icon: "💓"
+        },
+        {
+        day: 16,
+        date: "10 de febrero, 2026",
+        text: "Guardo cada recuerdo contigo como algo sagrado. Y sé que vendrán muchos más, porque no pienso irme a ningún lado.",
+        icon: "📸"
+        },
+        {
+        day: 17,
+        date: "11 de febrero, 2026",
+        text: "La espera casi termina, pero lo que siento por ti no tiene final. No me canso, no me rindo, no dudo.",
+        icon: "⌛"
+        },
+        {
+        day: 18,
+        date: "12 de febrero, 2026",
+        text: "Pasado mañana te veré. Y todo habrá valido la pena. Cada día lejos solo confirmó lo mucho que te quiero.",
+        icon: "🎁"
+        },
+        {
+        day: 19,
+        date: "13 de febrero, 2026",
+        text: "Mañana termina la cuenta, pero no lo nuestro. Corazoncito, nunca me cansaría de ti. Te elijo hoy, mañana y siempre.",
+        icon: "❤️",
+        special: true
+        }
+        ];
+
+
+        // Datos de las 5 canciones
+        const songs = [
+        {
+            title: "Corazón",
+            artist: "Danny Ocean",
+            duration: "2:43",
+            cover: "img/img-2.jpeg",
+            audio: "audio/corazon.mp3"
+        },
+        {
+            title: "La Promesa",
+            artist: "Melendi",
+            duration: "3:50",
+            cover: "img/img-3.jpeg",
+            audio: "audio/la-promesa.mp3"
+        },
+        {
+            title: "Una y Otra Vez",
+            artist: "Manuel Medrano",
+            duration: "4:41",
+            cover: "img/img-5.jpeg",
+            audio: "audio/una-y-otra-vez.mp3"
+        },
+        {
+            title: "Bendita Tu Luz",
+            artist: "Maná ft. Juan Luis Guerra",
+            duration: "4:16",
+            cover: "img/img-4.jpeg",
+            audio: "audio/bendita-tu-luz.mp3"
+        },
+        {
+            title: "Me Enamora",
+            artist: "Juanes",
+            duration: "3:06",
+            cover: "img/img-6.jpeg",
+            audio: "audio/me-enamora.mp3"
+        },
+        {
+            title: "Piel Canela",
+            artist: "Cuco",
+            duration: "1:43",
+            cover: "img/img-8.jpeg",
+            audio: "audio/piel-canela.mp3"
+        }
+    ];
+
+
+        // Variables del carrusel de notas
+        let currentSlide = 0;
+        const carouselTrack = document.getElementById('carouselTrack');
+        const currentDayElement = document.getElementById('currentDay');
+        const indicatorsContainer = document.getElementById('indicators');
+
+        // Variables del carrusel de canciones
+        let currentSongSlide = 0;
+        const carouselTrackSongs = document.getElementById('carouselTrackSongs');
+        const indicatorsSongsContainer = document.getElementById('indicatorsSongs');
+
+        // Función para crear las slides de notas
+        function createSlides() {
+            notes.forEach((note, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'carousel-slide';
+                slide.dataset.index = index;
+
+                const borderClass = note.special
+                    ? 'border-2 border-rose-300'
+                    : 'border border-rose-100';
+
+                slide.innerHTML = `
+                    <div class="note-card bg-white ${borderClass} rounded-3xl p-8 max-w-md mx-auto">
+
+                        <!-- CABECERA -->
+                        <div class="flex items-center justify-between mb-6">
+                            <span class="text-rose-600 font-bold text-xl">
+                                Día ${note.day}
+                            </span>
+                            <span class="text-gray-500 text-sm">
+                                ${note.date}
+                            </span>
+                        </div>
+
+                        <!-- TEXTO -->
+                        <p class="text-gray-700 text-xl md:text-2xl mb-6 leading-relaxed font-light text-center">
+                            ${note.text}
+                        </p>
+
+                        <!-- PIE -->
+                        <div class="flex items-center justify-between mt-auto pt-6 border-t border-gray-200">
+                            <span class="text-gray-500 italic text-sm">
+                                Con amor, Alexander Caviedes Romero
+                            </span>
+                            <span class="text-4xl">
+                                ${note.icon}
+                            </span>
+                        </div>
+
+                    </div>
+                `;
+
+                carouselTrack.appendChild(slide);
+            });
+
+            updateSlideClasses();
+        }
+
+
+        // Función para crear slides de canciones
+        function createSongSlides() {
+            songs.forEach((song, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'carousel-slide-song';
+                slide.dataset.index = index;
+
+                slide.innerHTML = `
+                <div class="song-card bg-white rounded-3xl p-6 max-w-md mx-auto border border-rose-100 shadow-xl">
+
+                    <audio src="${song.audio}" preload="metadata"></audio>
+
+                    <!-- Portada -->
+                    <div class="w-44 h-44 rounded-2xl mb-4 overflow-hidden shadow-lg mx-auto">
+                        <img src="${song.cover}" class="w-full h-full object-cover">
+                    </div>
+
+                    <!-- Info -->
+                    <div class="text-center mb-4">
+                        <h4 class="text-xl font-bold text-gray-800">${song.title}</h4>
+                        <p class="text-gray-500">${song.artist}</p>
+                    </div>
+
+                    <!-- Barra de progreso -->
+                    <div class="mb-3">
+                        <input type="range" value="0" min="0" max="100"
+                            class="progress w-full h-1 rounded-lg appearance-none bg-rose-200 cursor-pointer">
+                        <div class="flex justify-between text-xs text-gray-500 mt-1">
+                            <span class="current-time">0:00</span>
+                            <span class="duration">${song.duration}</span>
+                        </div>
+                    </div>
+
+                    <!-- Controles -->
+                    <div class="flex items-center justify-center gap-6 mt-4">
+                        <button class="play-btn">
+                            <svg class="icon-play" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                            <svg class="icon-pause hidden" viewBox="0 0 24 24">
+                                <path d="M6 5h4v14H6zm8 0h4v14h-4z"/>
+                            </svg>
+                        </button>
+
+                    </div>
+
+                </div>
+                `;
+
+                carouselTrackSongs.appendChild(slide);
+            });
+
+            updateSongSlideClasses();
+        }
+
+
+        function setupSongControls() {
+            document.querySelectorAll('.song-card').forEach(card => {
+
+                const audio = card.querySelector('audio');
+                const playBtn = card.querySelector('.play-btn');
+                const playIcon = card.querySelector('.icon-play');
+                const pauseIcon = card.querySelector('.icon-pause');
+                const progress = card.querySelector('.progress');
+                const currentTimeEl = card.querySelector('.current-time');
+
+                // PLAY / PAUSE
+                playBtn.addEventListener('click', () => {
+
+                    // Pausar otros audios
+                    document.querySelectorAll('audio').forEach(a => {
+                        if (a !== audio) {
+                            a.pause();
+                            a.currentTime = 0;
+                        }
+                    });
+
+                    document.querySelectorAll('.icon-play').forEach(i => i.classList.remove('hidden'));
+                    document.querySelectorAll('.icon-pause').forEach(i => i.classList.add('hidden'));
+
+                    if (audio.paused) {
+                        audio.play();
+                        playIcon.classList.add('hidden');
+                        pauseIcon.classList.remove('hidden');
+                    } else {
+                        audio.pause();
+                        playIcon.classList.remove('hidden');
+                        pauseIcon.classList.add('hidden');
+                    }
+                });
+
+                // ACTUALIZAR PROGRESO
+                audio.addEventListener('timeupdate', () => {
+                    const percent = (audio.currentTime / audio.duration) * 100 || 0;
+                    progress.value = percent;
+                    currentTimeEl.textContent = formatTime(audio.currentTime);
+                });
+
+                // SEEK EXACTO (arrastras y va al segundo exacto)
+                progress.addEventListener('input', () => {
+                    audio.currentTime = (progress.value / 100) * audio.duration;
+                });
+
+                // RESET AL TERMINAR
+                audio.addEventListener('ended', () => {
+                    playIcon.classList.remove('hidden');
+                    pauseIcon.classList.add('hidden');
+                    progress.value = 0;
+                    currentTimeEl.textContent = '0:00';
+                });
+            });
+        }
+
+
+
+        // Función para calcular tiempo actual basado en progreso
+        function calculateCurrentTime(duration, progress) {
+            const parts = duration.split(':');
+            const totalSeconds = parseInt(parts[0]) * 60 + parseInt(parts[1]);
+            const currentSeconds = Math.floor((totalSeconds * progress) / 100);
+            const minutes = Math.floor(currentSeconds / 60);
+            const seconds = currentSeconds % 60;
+            return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Función para actualizar clases de slides (efecto de profundidad)
+        function updateSlideClasses() {
+            const slides = carouselTrack.querySelectorAll('.carousel-slide');
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active', 'prev', 'next');
+                if (index === currentSlide) {
+                    slide.classList.add('active');
+                } else if (index === currentSlide - 1) {
+                    slide.classList.add('prev');
+                } else if (index === currentSlide + 1) {
+                    slide.classList.add('next');
+                }
+            });
+        }
+
+        // Función para actualizar clases de slides de canciones
+        function updateSongSlideClasses() {
+            const slides = carouselTrackSongs.querySelectorAll('.carousel-slide-song');
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active', 'prev', 'next');
+                if (index === currentSongSlide) {
+                    slide.classList.add('active');
+                } else if (index === currentSongSlide - 1) {
+                    slide.classList.add('prev');
+                } else if (index === currentSongSlide + 1) {
+                    slide.classList.add('next');
+                }
+            });
+        }
+
+        // Función para crear indicadores de notas
+        function createIndicators() {
+            notes.forEach((_, index) => {
+                const indicator = document.createElement('div');
+                indicator.className = 'indicator cursor-pointer';
+                indicator.addEventListener('click', () => goToSlide(index));
+                indicatorsContainer.appendChild(indicator);
+            });
+            updateIndicators();
+        }
+
+        // Función para crear indicadores de canciones
+        function createSongIndicators() {
+            songs.forEach((_, index) => {
+                const indicator = document.createElement('div');
+                indicator.className = 'indicator cursor-pointer';
+                indicator.addEventListener('click', () => goToSongSlide(index));
+                indicatorsSongsContainer.appendChild(indicator);
+            });
+            updateSongIndicators();
+        }
+
+        // Función para actualizar indicadores de notas
+        function updateIndicators() {
+            const indicators = indicatorsContainer.querySelectorAll('.indicator');
+            indicators.forEach((indicator, index) => {
+                if (index === currentSlide) {
+                    indicator.classList.add('active');
+                } else {
+                    indicator.classList.remove('active');
+                }
+            });
+        }
+
+        // Función para actualizar indicadores de canciones
+        function updateSongIndicators() {
+            const indicators = indicatorsSongsContainer.querySelectorAll('.indicator');
+            indicators.forEach((indicator, index) => {
+                if (index === currentSongSlide) {
+                    indicator.classList.add('active');
+                } else {
+                    indicator.classList.remove('active');
+                }
+            });
+        }
+
+        // Función para ir a una slide específica de notas
+        function goToSlide(index) {
+            currentSlide = index;
+            updateCarousel();
+        }
+
+        // Función para ir a una slide específica de canciones
+        function goToSongSlide(index) {
+            currentSongSlide = index;
+            updateSongCarousel();
+        }
+
+        // Función para actualizar el carrusel de notas
+        function updateCarousel() {
+            const slides = carouselTrack.children;
+            const containerWidth = carouselTrack.parentElement.offsetWidth;
+            const slideWidth = slides[0].offsetWidth;
+
+            const offset = (containerWidth / 2) - (slideWidth / 2) - (currentSlide * slideWidth);
+
+            carouselTrack.style.transform = `translateX(${offset}px)`;
+
+            currentDayElement.textContent = currentSlide + 1;
+            updateSlideClasses();
+            updateIndicators();
+        }
+
+
+        // Función para actualizar el carrusel de canciones
+        function updateSongCarousel() {
+            const slides = carouselTrackSongs.children;
+            const containerWidth = carouselTrackSongs.parentElement.offsetWidth;
+            const slideWidth = slides[0].offsetWidth;
+
+            const offset = (containerWidth / 2) - (slideWidth / 2) - (currentSongSlide * slideWidth);
+
+            carouselTrackSongs.style.transform = `translateX(${offset}px)`;
+
+            updateSongSlideClasses();
+            updateSongIndicators();
+        }
+
+
+        // Soporte para gestos táctiles en notas
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        carouselTrack.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        carouselTrack.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            if (touchStartX - touchEndX > swipeThreshold && currentSlide < notes.length - 1) {
+                currentSlide++;
+                updateCarousel();
+            } else if (touchEndX - touchStartX > swipeThreshold && currentSlide > 0) {
+                currentSlide--;
+                updateCarousel();
+            }
+        }
+
+        // Soporte para gestos táctiles en canciones
+        let touchStartXSong = 0;
+        let touchEndXSong = 0;
+
+        carouselTrackSongs.addEventListener('touchstart', (e) => {
+            touchStartXSong = e.changedTouches[0].screenX;
+        });
+
+        carouselTrackSongs.addEventListener('touchend', (e) => {
+            touchEndXSong = e.changedTouches[0].screenX;
+            handleSwipeSong();
+        });
+
+        function handleSwipeSong() {
+            const swipeThreshold = 50;
+            if (touchStartXSong - touchEndXSong > swipeThreshold && currentSongSlide < songs.length - 1) {
+                currentSongSlide++;
+                updateSongCarousel();
+            } else if (touchEndXSong - touchStartXSong > swipeThreshold && currentSongSlide > 0) {
+                currentSongSlide--;
+                updateSongCarousel();
+            }
+        }
+
+        // Soporte para teclado (notas)
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft' && currentSlide > 0) {
+                currentSlide--;
+                updateCarousel();
+            } else if (e.key === 'ArrowRight' && currentSlide < notes.length - 1) {
+                currentSlide++;
+                updateCarousel();
+            }
+        });
+
+        // Función para scroll suave a las notas
+        function scrollToNotes() {
+            document.getElementById('notes-section').scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+        // Animación del contador
+        function animateCounter() {
+            const counter = document.getElementById('counter');
+            let count = 0;
+            const target = 19;
+            const duration = 2000;
+            const increment = target / (duration / 16);
+            
+            const timer = setInterval(() => {
+                count += increment;
+                if (count >= target) {
+                    counter.textContent = target;
+                    clearInterval(timer);
+                } else {
+                    counter.textContent = Math.floor(count);
+                }
+            }, 16);
+        }
+
+        // Intersection Observer para animaciones fade-in
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Inicializar al cargar
+        document.addEventListener('DOMContentLoaded', () => {
+            // Crear slides e indicadores de notas
+            createSlides();
+            createIndicators();
+            updateCarousel();
+            
+            // Crear slides e indicadores de canciones
+            createSongSlides();
+            createSongIndicators();
+            updateSongCarousel();
+            
+            setupSongControls();
+
+            // Animar contador
+            setTimeout(animateCounter, 500);
+            
+            // Observar elementos fade-in
+            const fadeElements = document.querySelectorAll('.fade-in');
+            fadeElements.forEach(el => observer.observe(el));
+        });
+
+        // Efecto parallax suave en scroll
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hearts = document.querySelectorAll('.floating-heart');
+            hearts.forEach((heart, index) => {
+                const speed = 0.5 + (index * 0.1);
+                heart.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+
+    </script>
+</body>
+</html>
